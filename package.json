@@ -1,0 +1,30 @@
+{
+  "name": "glowing-stripe",
+  "version": "1.0.0",
+  "description": "Stripe API Project for CC17",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sethwright/glowing-stripe.git"
+  },
+  "author": "@sethwright, @TokyoDom, @GuchiAtWork",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sethwright/glowing-stripe/issues"
+  },
+  "homepage": "https://github.com/sethwright/glowing-stripe#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "knex": "^0.21.17",
+    "pg": "^8.5.1",
+    "stripe": "^8.135.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
