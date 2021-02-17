@@ -1,3 +1,5 @@
-export default function Snippets() {
-    return <div>Snippets</div>
+export default function Snippets(props) {
+    const { title } = props.match.params;
+
+    return <div>{title}</div>
 }
