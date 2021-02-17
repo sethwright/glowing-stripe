@@ -6,7 +6,12 @@
   "scripts": {
     "start": "node server",
     "dev": "nodemon server",
-    "build": "cd client && npm install && npm run build"
+    "build": "cd client && npm install && npm run build",
+    "rollback": "node_modules/.bin/knex migrate:rollback --knexfile ./server/knexfile.js",
+    "migrate": "node_modules/.bin/knex migrate:latest --knexfile ./server/knexfile.js",
+    "seed": "node_modules/.bin/knex seed:run --knexfile ./server/knexfile.js",
+    "migrateMake": "node_modules/.bin/knex migrate:make --knexfile ./server/knexfile.js",
+    "seedMake": "node_modules/.bin/knex seed:make --knexfile ./server/knexfile.js"
   },
   "repository": {
     "type": "git",
