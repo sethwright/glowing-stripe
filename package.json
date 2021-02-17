@@ -6,7 +6,12 @@
   "scripts": {
     "start": "node server",
     "dev": "nodemon server",
-    "build": "cd client && npm install && npm run build"
+    "build": "cd client && npm install && npm run build",
+    "rollback": "node_modules/.bin/knex migrate:rollback --knexfile ./server/knexfile.js",
+    "migrate": "node_modules/.bin/knex migrate:latest --knexfile ./server/knexfile.js",
+    "seed": "node_modules/.bin/knex seed:run --knexfile ./server/knexfile.js",
+    "migrateMake": "node_modules/.bin/knex migrate:make --knexfile ./server/knexfile.js",
+    "seedMake": "node_modules/.bin/knex seed:make --knexfile ./server/knexfile.js"
   },
   "repository": {
     "type": "git",
@@ -19,8 +24,12 @@
   },
   "homepage": "https://github.com/sethwright/glowing-stripe#readme",
   "dependencies": {
+    "bcrypt": "^5.0.0",
+    "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.17",
     "pg": "^8.5.1",
     "stripe": "^8.135.0"
