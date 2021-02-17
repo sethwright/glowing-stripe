@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const app = express();
 
@@ -53,5 +54,12 @@ app.get("/setup", (req, res) => {
         premiumPrice: process.env.PRICE_PREMIUM,
     });
 });
+
+
+// This servers the built app
+app.use(express.static(path.resolve(__dirname, "..", "client", "build")));
+app.get("*", (req,res) => {
+  res.sendFile(path.resolve(__dirname, "..", "client", "build", "index.html"));
+})
 
 module.exports = app;
