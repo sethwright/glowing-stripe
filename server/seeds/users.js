@@ -10,22 +10,3 @@ exports.seed = function(knex) {
       ]);
     })
 };
-
-
-/*
-  .createTable("users", (table) => {
-      table.increments("id").index().primary();
-      table.unique("username").notNullable();
-      table.string("password").notNullable();
-      table.boolean("premium").defaultTo(false);
-      table.string("firstname");
-      table.string("lastname");
-
-  })
-  .createTable("content", (table) => {
-      table.increments("id").index().primary();
-      table.string("title").notNullable();
-      table.string("content_type").notNullable();
-      table.boolean("premium_only").defaultTo(true); // ? best to defaultTo(true), demo will demonstrate redirect to subscription page
-  })
-*/
