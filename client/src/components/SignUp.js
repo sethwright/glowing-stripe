@@ -9,6 +9,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import Alert from "@material-ui/lab/Alert";
 import { useState } from "react";
 import axios from "axios";
 import { Redirect } from "react-router";
@@ -39,10 +40,12 @@ export default function SignUp(props) {
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
   const classes = useStyles();
 
   const createAccount = async (event) => {
+    setShowAlert(false);
     event.preventDefault();
     axios
       .post("/auth/signup", {
@@ -55,7 +58,20 @@ export default function SignUp(props) {
         if (res.status === 200) {
           setRedirect(true);
         }
+      })
+      .catch((err) => {
+        setShowAlert(true);
       });
+  };
+
+  const displayAlert = () => {
+    if (showAlert) {
+      return (
+        <Alert variant="filled" severity="error">
+          Incorrect credentials entered!
+        </Alert>
+      );
+    }
   };
 
   return (
@@ -69,6 +85,7 @@ export default function SignUp(props) {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
+        {displayAlert()}
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>

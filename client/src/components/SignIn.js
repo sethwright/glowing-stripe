@@ -8,6 +8,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import Alert from "@material-ui/lab/Alert";
 import { useState } from "react";
 import axios from "axios";
 import { Redirect } from "react-router";
@@ -36,11 +37,13 @@ export default function SignIn(props) {
   const [username, setUsername] = useState("");
   const [pass, setPass] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
   const classes = useStyles();
 
   const logInAccount = async (event) => {
     event.preventDefault();
+    setShowAlert(false);
     axios
       .post("/auth/login", {
         username: username,
@@ -50,7 +53,20 @@ export default function SignIn(props) {
         if (res.status === 200) {
           setRedirect(true);
         }
+      })
+      .catch((err) => {
+        setShowAlert(true);
       });
+  };
+
+  const displayAlert = () => {
+    if (showAlert) {
+      return (
+        <Alert variant="filled" severity="error">
+          Incorrect credentials entered!
+        </Alert>
+      );
+    }
   };
 
   return (
@@ -64,6 +80,7 @@ export default function SignIn(props) {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
+        {displayAlert()}
         <form className={classes.form} noValidate>
           <TextField
             variant="outlined"
