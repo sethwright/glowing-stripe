@@ -11,6 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import CodeImage from "../assets/code.png";
 
 const useStyles = makeStyles((theme) => ({
   heroContent: {
@@ -26,22 +27,17 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
   },
-  cardMedia: {
-    paddingTop: "56.25%", // 16:9
-  },
   cardContent: {
     flexGrow: 1,
   },
 }));
-
-const cards = [1, 2, 3];
 
 export default function Album() {
   const [snippets, setSnippets] = useState([]);
 
   useEffect(() => {
     axios.get("/snippets").then((res) => {
-      console.log(res);
+      setSnippets(res.data);
     });
   }, []);
 
@@ -61,7 +57,7 @@ export default function Album() {
               color="textPrimary"
               gutterBottom
             >
-              Album layout
+              CodeSnippets
             </Typography>
             <Typography
               variant="h5"
@@ -69,31 +65,26 @@ export default function Album() {
               color="textSecondary"
               paragraph
             >
-              Something short and leading about the collection below—its
-              contents, the creator, etc. Make it short and sweet, but not too
-              short so folks don&apos;t simply skip over it entirely.
+              Share your code with everybody!
             </Typography>
           </Container>
         </div>
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
+            {snippets.map((snippet) => (
+              <Grid item key={snippet.id} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardMedia
-                    className={classes.cardMedia}
-                    image="../../public/code.png"
+                    src={CodeImage}
+                    component="img"
                     title="Check this code out"
                   />
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Heading
+                      {snippet.title}
                     </Typography>
-                    <Typography>
-                      This is a media card. You can use this section to describe
-                      the content.
-                    </Typography>
+                    <Typography>Take at look at this person's code!</Typography>
                   </CardContent>
                   <CardActions>
                     <Button size="small" color="primary">
