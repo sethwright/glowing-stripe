@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn(props) {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -46,7 +46,7 @@ export default function SignIn(props) {
     setShowAlert(false);
     axios
       .post("/auth/login", {
-        username: username,
+        email: email,
         password: pass,
       })
       .then((res) => {
@@ -87,11 +87,11 @@ export default function SignIn(props) {
             margin="normal"
             required
             fullWidth
-            id="username"
-            label="username"
-            name="username"
+            id="email"
+            label="Email"
+            name="email"
             onChange={(event) => {
-              setUsername(event.target.value);
+              setEmail(event.target.value);
             }}
             autoFocus
           />

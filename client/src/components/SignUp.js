@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp(props) {
+  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [pass, setPass] = useState("");
   const [firstname, setFirstName] = useState("");
@@ -49,6 +50,7 @@ export default function SignUp(props) {
     event.preventDefault();
     axios
       .post("/auth/signup", {
+        email: email,
         username: username,
         password: pass,
         firstname: firstname,
@@ -115,6 +117,19 @@ export default function SignUp(props) {
                   setLastName(event.target.value);
                 }}
                 autoComplete="lname"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="email"
+                label="Email"
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                }}
+                name="email"
               />
             </Grid>
             <Grid item xs={12}>
