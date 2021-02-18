@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useState } from "react";
 import axios from "axios";
+import { Redirect } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,10 +35,11 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn(props) {
   const [username, setUsername] = useState("");
   const [pass, setPass] = useState("");
+  const [redirect, setRedirect] = useState(false);
 
   const classes = useStyles();
 
-  const createAccount = async (event) => {
+  const logInAccount = async (event) => {
     event.preventDefault();
     axios
       .post("/auth/login", {
@@ -46,6 +48,7 @@ export default function SignIn(props) {
       })
       .then((res) => {
         if (res.status === 200) {
+          setRedirect(true);
         }
       });
   };
@@ -53,6 +56,7 @@ export default function SignIn(props) {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
+      {redirect && <Redirect to="/" />}
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -93,7 +97,7 @@ export default function SignIn(props) {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={createAccount}
+            onClick={logInAccount}
           >
             Sign In
           </Button>
