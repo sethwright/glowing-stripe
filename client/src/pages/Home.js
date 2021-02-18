@@ -9,11 +9,11 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import AppBar from "@material-ui/core/AppBar";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import CodeImage from "../assets/code.png";
 import { Link, useLocation } from "react-router-dom";
+import NavBar from "../components/NavBar";
 
 const useStyles = makeStyles((theme) => ({
   heroContent: {
@@ -50,6 +50,7 @@ export default function Home() {
   return (
     <React.Fragment>
       <CssBaseline />
+      <NavBar />
       <main>
         {/* Hero unit */}
         <div className={classes.heroContent}>
