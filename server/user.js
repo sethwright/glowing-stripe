@@ -63,7 +63,7 @@ router.get("/logout", (req, res) => {
 });
 
 //subscribe
-router.get("/user", (req, res) => {
+router.get("/users", (req, res) => {
   if (req.user) {
     res.sendStatus(200);
   } else {

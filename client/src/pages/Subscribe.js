@@ -13,7 +13,7 @@ export default function Subscribe() {
   // this runs once on load and every time the value in the dependency array changes
   useEffect(() => {
     axios
-      .get("/auth/user")
+      .get("/auth/users")
       .then((res) => {
         setStatusCode(res.status);
         axios.get("/setup").then((res) => {
