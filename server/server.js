@@ -20,69 +20,30 @@ app.use(
   })
 );
 
+// this sets user routing API endpoints (inside users.js) to URL "/auth/(etc)". 
 app.use("/auth", userRoute);
 
-// Fetch the Checkout Session to display the JSON result on the success page
-//  WE MIGHT NOT NEED THIS LATER ?
+
 app.get("/checkout-session", async (req, res) => {
   const { session_id } = req.query;
-  const { username } = req.user;
+  const { email } = req.user;
   const session = await stripe.checkout.sessions.retrieve(session_id);
+  console.log(session);
 
-  if (session.payment_status === "paid") { ///???? no, bad validation
+  // this will compare what the session id in the URL to the session info from the stripe and check the payment status.
+  if (session.payment_status === "paid" && email === session.customer_email) {
     try {
-      await knex("users").update({ premium: true }).where({ username }); 
+      await knex("users").update({ premium: true }).where({ email }); 
+      const token = jwt.sign({ email, premium: true }, process.env.JWT_SECRET, { expiresIn: "7d" });
+      res.cookie("token", token, { httpOnly: true });
       res.sendStatus(200);
     } catch (err) {
       res.sendStatus(400);
     }
+  } else {
+    res.sendStatus(403);
   }
-
-  // http://localhost:5000/checkout-session?sessionId=cs_test_a1BWs4f5VhIFXSSjH1css6O9jgHB5gBT4PgG22XtKjOJ5muzlPOflIXvdo
-  // console.log(session);
-
-  // res.send(session);
 });
-
-/** 
- {
-    "id": "cs_test_a1c0fQYuwcgn3caGmo5s2DG108amZ1P0EBDiAYJzGuQxHkBVlNhxssZfBW",
-    "object": "checkout.session",
-    "allow_promotion_codes": null,
-    "amount_subtotal": 500,
-    "amount_total": 500,
-    "billing_address_collection": null,
-    "cancel_url": "http://localhost:5000/",
-    "client_reference_id": null,
-    "currency": "jpy",
-    "customer": "cus_IxmgcaLZoYLdQa",
-    "customer_details": {
-        "email": "aaa@aaa.com",
-        "tax_exempt": "none",
-        "tax_ids": []
-    },
-    "customer_email": null,
-    "livemode": false,
-    "locale": null,
-    "metadata": {},
-    "mode": "subscription",
-    "payment_intent": null,
-    "payment_method_types": [
-        "card"
-    ],
-    "payment_status": "paid",
-    "setup_intent": null,
-    "shipping": null,
-    "shipping_address_collection": null,
-    "submit_type": null,
-    "subscription": "sub_Ixmg0hofSJIBty",
-    "success_url": "http://localhost:5000/?session_id={CHECKOUT_SESSION_ID}",
-    "total_details": {
-        "amount_discount": 0,
-        "amount_tax": 0
-    }
-}
-*/
 
 app.post("/create-checkout-session", async (req, res) => {
   const domainURL = process.env.DOMAIN;
@@ -92,7 +53,7 @@ app.post("/create-checkout-session", async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       payment_method_types: ["card"],
-      //customer-email???
+      customer_email: req.user.email,
       line_items: [
         {
           price: priceID,
