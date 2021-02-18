@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
 import { Redirect } from "react-router-dom";
+import PricingOptions from "../components/PricingOptions";
 
 export default function Subscribe() {
   const [monthlyPrice, setMonthlyPrice] = useState("");
@@ -15,17 +16,17 @@ export default function Subscribe() {
       .get("/auth/user")
       .then((res) => {
         setStatusCode(res.status);
+        axios.get("/setup").then((res) => {
+          setMonthlyPrice(res.data.monthlyPrice);
+          setYearlyPrice(res.data.yearlyPrice);
+          loadStripe(res.data.publishKey).then((stripe) => {
+            stripeRef.current = stripe;
+          });
+        });
       })
       .catch((err) => {
         setStatusCode(err.response.status);
       });
-    axios.get("/setup").then((res) => {
-      setMonthlyPrice(res.data.monthlyPrice);
-      setYearlyPrice(res.data.yearlyPrice);
-      loadStripe(res.data.publishKey).then((stripe) => {
-        stripeRef.current = stripe;
-      });
-    });
   }, []);
 
   const createCheckoutSession = async (priceID) => {
@@ -38,19 +39,11 @@ export default function Subscribe() {
     <div className="Subscribe">
       {statusCode === 403 && <Redirect to="/login" />}
       {statusCode === 200 && (
-        <>
-          <h1>Stripe API</h1>
-          <button onClick={() => createCheckoutSession(monthlyPrice)}>
-            Monthly
-          </button>
-          <button onClick={() => createCheckoutSession(yearlyPrice)}>
-            Yearly
-          </button>
-        </>
+        <PricingOptions
+          priceIDs={[monthlyPrice, yearlyPrice]}
+          createCheckoutSession={createCheckoutSession}
+        />
       )}
     </div>
   );
 }
-
-// this page neesds to redirect if not logged in
-// it looks like shit
