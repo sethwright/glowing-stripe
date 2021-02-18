@@ -63,5 +63,12 @@ router.get("/logout", (req, res) => {
 });
 
 //subscribe
+router.get("/user", (req, res) => {
+  if (req.user) {
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(403);
+  }
+});
 
 module.exports = router;
