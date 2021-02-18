@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const app = express();
 const jwtMiddleWare = require("express-jwt");
+const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const stripe = require("stripe")(process.env.SECRET_KEY);
 
@@ -28,7 +29,6 @@ app.get("/checkout-session", async (req, res) => {
   const { session_id } = req.query;
   const { email } = req.user;
   const session = await stripe.checkout.sessions.retrieve(session_id);
-  console.log(session);
 
   // this will compare what the session id in the URL to the session info from the stripe and check the payment status.
   if (session.payment_status === "paid" && email === session.customer_email) {
@@ -38,10 +38,11 @@ app.get("/checkout-session", async (req, res) => {
       res.cookie("token", token, { httpOnly: true });
       res.sendStatus(200);
     } catch (err) {
-      res.sendStatus(400);
+      console.error(err);
+      res.sendStatus(400); //Server could not process your request at this time, please try again later.
     }
   } else {
-    res.sendStatus(403);
+    res.sendStatus(403); //Payment failed
   }
 });
 
@@ -60,7 +61,8 @@ app.post("/create-checkout-session", async (req, res) => {
           quantity: 1,
         },
       ],
-      success_url: `${domainURL}?session_id={CHECKOUT_SESSION_ID}`, // NEED 2 FIX THIS?
+      // this will redirect the user to verify after completing purchase
+      success_url: `${domainURL}verify/?session_id={CHECKOUT_SESSION_ID}`, // NEED 2 FIX THIS?
       cancel_url: `${domainURL}`,
     });
 
@@ -106,8 +108,8 @@ app.get("/snippets/:id", async (req, res) => {
 app.get("/setup", (req, res) => {
   res.send({
     publishKey: process.env.PUBLISHABLE_KEY,
-    basicPrice: process.env.PRICE_BASIC,
-    premiumPrice: process.env.PRICE_PREMIUM,
+    monthlyPrice: process.env.PRICE_MONTHLY,
+    yearlyPrice: process.env.PRICE_YEARLY,
   });
 });
 
