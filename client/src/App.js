@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Settings from "./pages/Settings";
 import Subscribe from "./pages/Subscribe";
 import Snippet from "./pages/Snippet";
+import Verify from "./pages/Verify";
 
 function App() {
   return (
@@ -13,11 +14,14 @@ function App() {
         <Route path="/login">
           <Login />
         </Route>
-        <Route path="/snippet/:title" component={Snippet} />
+        <Route path="/snippet/:id" component={Snippet} />
         <Route path="/subscribe">
           <Subscribe />
         </Route>
-        <Route path="/">
+        <Route path="/verify">
+          <Verify />
+        </Route>
+        <Route exact path="/">
           <Home />
         </Route>
       </Switch>

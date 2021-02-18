@@ -3,16 +3,16 @@ import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
 
 export default function Subscribe() {
-  const [basicPrice, setBasicPrice] = useState("");
-  const [premPrice, setPremPrice] = useState("");
+  const [monthlyPrice, setMonthlyPrice] = useState("");
+  const [yearlyPrice, setYearlyPrice] = useState("");
   const [pubKey, setPubKey] = useState("");
   const stripeRef = useRef();
 
   // this runs once on load and every time the value in the dependency array changes
   useEffect(() => {
     axios.get("/setup").then((res) => {
-      setBasicPrice(res.data.basicPrice);
-      setPremPrice(res.data.premiumPrice);
+      setMonthlyPrice(res.data.monthlyPrice);
+      setYearlyPrice(res.data.yearlyPrice);
       setPubKey(res.data.publishKey);
       loadStripe(res.data.publishKey).then((stripe) => {
         stripeRef.current = stripe;
@@ -29,8 +29,8 @@ export default function Subscribe() {
   return (
     <div className="Subscribe">
       <h1>Stripe API</h1>
-      <button onClick={() => createCheckoutSession(basicPrice)}>Basic</button>
-      <button onClick={() => createCheckoutSession(premPrice)}>Premium</button>
+      <button onClick={() => createCheckoutSession(monthlyPrice)}>Monthly</button>
+      <button onClick={() => createCheckoutSession(yearlyPrice)}>Yearly</button>
     </div>
   );
 }
