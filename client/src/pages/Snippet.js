@@ -5,6 +5,7 @@ import { CopyBlock, dracula } from "react-code-blocks";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
+import NavBar from "../components/NavBar";
 
 export default function Snippets(props) {
   const { id } = props.match.params;
@@ -31,6 +32,7 @@ export default function Snippets(props) {
   return (
     <Container component="main" maxWidth="md">
       <CssBaseline />
+      <NavBar />
       <Typography component="h1" variant="h2" align="center">
         {snippet.title}
       </Typography>
