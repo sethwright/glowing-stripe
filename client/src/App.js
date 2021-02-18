@@ -13,7 +13,7 @@ function App() {
         <Route path="/login">
           <Login />
         </Route>
-        <Route path="/snippet/:title" component={Snippet} />
+        <Route path="/snippet/:id" component={Snippet} />
         <Route path="/subscribe">
           <Subscribe />
         </Route>

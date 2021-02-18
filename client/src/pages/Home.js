@@ -9,9 +9,11 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import AppBar from "@material-ui/core/AppBar";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import CodeImage from "../assets/code.png";
+import { Link, useLocation } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   heroContent: {
@@ -32,8 +34,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Album() {
+export default function Home() {
   const [snippets, setSnippets] = useState([]);
+
+  const location = useLocation();
 
   useEffect(() => {
     axios.get("/snippets").then((res) => {
@@ -88,7 +92,7 @@ export default function Album() {
                   </CardContent>
                   <CardActions>
                     <Button size="small" color="primary">
-                      View
+                      <Link to={`/snippet/${snippet.id}`}>View</Link>
                     </Button>
                   </CardActions>
                 </Card>
