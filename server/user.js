@@ -18,8 +18,12 @@ router.post("/login", async (req, res) => {
 
   //compare passwords
   bcrypt.compare(password, user[0].password, (err, result) => {
-    if(result) {
-      const token = jwt.sign({ email, premium: user[0].premium }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    if (result) {
+      const token = jwt.sign(
+        { email, premium: user[0].premium },
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" }
+      );
       res.cookie("token", token, { httpOnly: true });
       res.sendStatus(200);
     } else {
@@ -29,7 +33,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/signup", async (req, res) => {
-  //client send user,pass,fname,lname,email
+  //client send email,user,pass,fname,lname,email
   const { email, password } = req.body;
 
   bcrypt.genSalt(10, (err, salt) => {
