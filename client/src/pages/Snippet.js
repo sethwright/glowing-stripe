@@ -30,18 +30,20 @@ export default function Snippets(props) {
   }, []);
 
   return (
-    <Container component="main" maxWidth="md">
-      <CssBaseline />
+    <div>
       <NavBar />
-      <Typography component="h1" variant="h2" align="center">
-        {snippet.title}
-      </Typography>
-      <CopyBlock
-        text={snippet.snippet || ""}
-        theme={dracula}
-        language={snippet.language || "text"}
-      />
-      {redirect && <Redirect to="/subscribe" />}
-    </Container>
+      <Container component="main" maxWidth="md">
+        <CssBaseline />
+        <Typography component="h1" variant="h2" align="center">
+          {snippet.title}
+        </Typography>
+        <CopyBlock
+          text={snippet.snippet || ""}
+          theme={dracula}
+          language={snippet.language || "text"}
+        />
+        {redirect && <Redirect to="/subscribe" />}
+      </Container>
+    </div>
   );
 }
