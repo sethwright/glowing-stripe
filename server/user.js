@@ -6,10 +6,10 @@ const db = require("./knex");
 
 router.post("/login", async (req, res) => {
   //client sends user and pass
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   //grab password from db
-  const user = await db("users").select("*").where({ username });
+  const user = await db("users").select("*").where({ email });
 
   if (user.length === 0) {
     res.status(400).send("User doesn't exist");
@@ -19,7 +19,7 @@ router.post("/login", async (req, res) => {
   //compare passwords
   bcrypt.compare(password, user[0].password, (err, result) => {
     if(result) {
-      const token = jwt.sign({ username, premium: user[0].premium }, process.env.JWT_SECRET, { expiresIn: "7d" });
+      const token = jwt.sign({ email, premium: user[0].premium }, process.env.JWT_SECRET, { expiresIn: "7d" });
       res.cookie("token", token, { httpOnly: true });
       res.sendStatus(200);
     } else {
@@ -29,8 +29,8 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/signup", async (req, res) => {
-  //client send user,pass,fname,lname
-  const { username, password } = req.body;
+  //client send user,pass,fname,lname,email
+  const { email, password } = req.body;
 
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(password, salt, async (err, hash) => {
@@ -39,7 +39,7 @@ router.post("/signup", async (req, res) => {
       try {
         await db("users").insert(req.body);
         const token = jwt.sign(
-          { username, premium: false },
+          { email, premium: false },
           process.env.JWT_SECRET,
           { expiresIn: "7d" }
         );
