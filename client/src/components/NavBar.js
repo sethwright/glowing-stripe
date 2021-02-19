@@ -17,11 +17,15 @@ const useStyles = makeStyles((theme) => ({
 export default function NavBar() {
   const classes = useStyles();
   const [loggedIn, setLoggedIn] = useState(false);
+  const [premium, setPremium] = useState(false);
 
   useEffect(() => {
     axios
       .get("/auth/users")
       .then((res) => {
+        if (res.data) {
+          setPremium(res.data.premium);
+        }
         setLoggedIn(true);
       })
       .catch((err) => {
@@ -42,18 +46,26 @@ export default function NavBar() {
       });
   };
 
+  const showSubscribeButton = () => {
+    if (!premium) {
+      return (
+        <Button color="inherit">
+          <Link
+            to={"/subscribe"}
+            style={{ textDecoration: "none", color: "#FFF" }}
+          >
+            Subscribe
+          </Link>
+        </Button>
+      );
+    }
+  };
+
   const showWhichButton = () => {
     if (loggedIn) {
       return (
         <ButtonGroup variant="text">
-          <Button color="inherit">
-            <Link
-              to={"/subscribe"}
-              style={{ textDecoration: "none", color: "#FFF" }}
-            >
-              Subscribe
-            </Link>
-          </Button>
+          {showSubscribeButton()}
           <Button color="inherit" onClick={logout}>
             Log Out
           </Button>
