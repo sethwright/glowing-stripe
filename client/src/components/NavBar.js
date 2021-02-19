@@ -3,6 +3,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -30,17 +31,33 @@ export default function NavBar() {
       });
   }, []);
 
+  const logout = () => {
+    axios
+      .get("/auth/logout")
+      .then((res) => {
+        setLoggedIn(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const showWhichButton = () => {
     if (loggedIn) {
       return (
-        <Button color="inherit">
-          <Link
-            to={"/subscribe"}
-            style={{ textDecoration: "none", color: "#FFF" }}
-          >
-            Subscribe
-          </Link>
-        </Button>
+        <ButtonGroup variant="text">
+          <Button color="inherit">
+            <Link
+              to={"/subscribe"}
+              style={{ textDecoration: "none", color: "#FFF" }}
+            >
+              Subscribe
+            </Link>
+          </Button>
+          <Button color="inherit" onClick={logout}>
+            Log Out
+          </Button>
+        </ButtonGroup>
       );
     } else {
       return (
