@@ -65,7 +65,8 @@ router.get("/logout", (req, res) => {
 //subscribe
 router.get("/users", (req, res) => {
   if (req.user) {
-    res.sendStatus(200);
+    res.status(200);
+    res.send(req.user);
   } else {
     res.sendStatus(403);
   }
